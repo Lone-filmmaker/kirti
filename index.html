@@ -1,96 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My GitHub Pages Site</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      color: #222;
-    }
-    header {
-      background: #222;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background: #444;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kirti AR Viewer</title>
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 30px;
-    }
+    <script type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
 
-    .card {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+    <style>
+      body {
+        margin: 0;
+        background: #000;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        color: #fff;
+      }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #222;
-      color: #fff;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Welcome to My GitHub Pages Site</h1>
-    <p>A clean, modern, responsive template</p>
-  </header>
+      model-viewer {
+        width: 100vw;
+        height: 100vh;
+      }
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
+      /* UI Panel */
+      #controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(20, 20, 20, 0.8);
+        padding: 15px 20px;
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 90%;
+        max-width: 400px;
+      }
 
-  <div class="container">
-    <section id="about" class="card">
-      <h2>About</h2>
-      <p>This is a simple, responsive GitHub Pages website template. It includes navigation, section layout, cards, and clean styling that works well across devices.</p>
-    </section>
+      label {
+        font-size: 14px;
+        opacity: 0.9;
+      }
 
-    <section id="projects" class="card">
-      <h2>Projects</h2>
-      <ul>
-        <li>Project One – description here</li>
-        <li>Project Two – description here</li>
-        <li>Project Three – description here</li>
-      </ul>
-    </section>
+      input[type="range"] {
+        width: 100%;
+      }
+    </style>
+  </head>
 
-    <section id="contact" class="card">
-      <h2>Contact</h2>
-      <p>Email: youremail@example.com</p>
-      <p>Socials: Instagram | GitHub | LinkedIn</p>
-    </section>
-  </div>
+  <body>
+    <model-viewer
+      id="viewer"
+      src="kirtis.glb"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+      environment-image="neutral"
+      exposure="1.2"
+    ></model-viewer>
 
-  <footer>
-    <p>© 2025 My GitHub Pages Site</p>
-  </footer>
-</body>
+    <!-- UI Controls -->
+    <div id="controls">
+      <div>
+        <label>Scale</label>
+        <input id="scaleSlider" type="range" min="0.1" max="3" step="0.01" value="1" />
+      </div>
+
+      <div>
+        <label>Rotation</label>
+        <input id="rotateSlider" type="range" min="0" max="360" step="1" value="0" />
+      </div>
+    </div>
+
+    <script>
+      const viewer = document.getElementById('viewer');
+      const scaleSlider = document.getElementById('scaleSlider');
+      const rotateSlider = document.getElementById('rotateSlider');
+
+      // Scale Handler
+      scaleSlider.addEventListener('input', () => {
+        const s = scaleSlider.value;
+        viewer.scale = `${s} ${s} ${s}`;
+      });
+
+      // Rotation Handler
+      rotateSlider.addEventListener('input', () => {
+        const r = rotateSlider.value;
+        viewer.orientation = `0deg ${r}deg 0deg`;
+      });
+    </script>
+  </body>
 </html>
