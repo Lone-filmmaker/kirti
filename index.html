@@ -36,7 +36,7 @@
         flex-direction: column;
         gap: 12px;
         width: 90%;
-        max-width: 400px;
+        max-width: 420px;
       }
 
       label {
@@ -56,9 +56,10 @@
       src="kirtis.glb"
       ar
       ar-modes="webxr scene-viewer quick-look"
+      ar-placement="floor"
       camera-controls
       auto-rotate
-      shadow-intensity="1"
+      shadow-intensity="1.3"
       environment-image="neutral"
       exposure="1.2"
     ></model-viewer>
@@ -71,8 +72,13 @@
       </div>
 
       <div>
-        <label>Rotation</label>
+        <label>Rotation (Turntable)</label>
         <input id="rotateSlider" type="range" min="0" max="360" step="1" value="0" />
+      </div>
+
+      <div>
+        <label>Lighting: Night ←→ Day</label>
+        <input id="lightSlider" type="range" min="0" max="1" step="0.01" value="0.5" />
       </div>
     </div>
 
@@ -80,17 +86,33 @@
       const viewer = document.getElementById('viewer');
       const scaleSlider = document.getElementById('scaleSlider');
       const rotateSlider = document.getElementById('rotateSlider');
+      const lightSlider = document.getElementById('lightSlider');
 
-      // Scale Handler
+      // Scale
       scaleSlider.addEventListener('input', () => {
         const s = scaleSlider.value;
         viewer.scale = `${s} ${s} ${s}`;
       });
 
-      // Rotation Handler
+      // Turntable rotation: ONLY Y-axis
       rotateSlider.addEventListener('input', () => {
         const r = rotateSlider.value;
         viewer.orientation = `0deg ${r}deg 0deg`;
+      });
+
+      // Lighting control
+      lightSlider.addEventListener('input', () => {
+        const t = lightSlider.value;
+
+        viewer.exposure = 0.4 + t * 1.0;
+
+        if (t < 0.5) {
+          viewer.environmentImage =
+            "https://modelviewer.dev/shared-assets/environments/moonless_night_1k.hdr";
+        } else {
+          viewer.environmentImage =
+            "https://modelviewer.dev/shared-assets/environments/neutral.hdr";
+        }
       });
     </script>
   </body>
